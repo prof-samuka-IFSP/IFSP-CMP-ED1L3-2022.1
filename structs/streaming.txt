@@ -1,0 +1,22 @@
+id: 1
+nome: Netflix
+mensalidade: 39.90
+num. de filmes: 3
+capacity: 100
+
+-------
+ID: 1
+nome: Harry Potter 1
+ano: 2001
+-------
+-------
+ID: 2
+nome: The Batman
+ano: 2022
+-------
+-------
+ID: 3
+nome: Avengers 2
+ano: 2019
+-------
+-------
