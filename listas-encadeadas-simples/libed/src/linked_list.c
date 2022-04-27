@@ -49,6 +49,58 @@ void LinkedList_add_first(LinkedList *L, int val) {
     L->size++;
 }
 
+void LinkedList_add_last_alt1(LinkedList *L, int val) {
+    if (LinkedList_is_empty(L)) {
+        Node *p = Node_create(val);
+        L->begin = p;
+        L->size++;
+        // LinkedList_add_first(L, val);
+    }
+    else {
+        Node *p = Node_create(val);
+        Node *q = L->begin;
+
+        while (q != NULL) {
+            if (q->next == NULL) {
+                q->next = p;
+                L->size++;
+                break;
+            }
+            q = q->next;
+        }
+    }
+}
+
+void LinkedList_add_last_alt2(LinkedList *L, int val) {
+    if (LinkedList_is_empty(L)) {
+        Node *p = Node_create(val);
+        L->begin = p;
+        L->size++;
+        // LinkedList_add_first(L, val);
+    }
+    else {
+        Node *p = Node_create(val);
+
+        // a lista possui apenas um nó
+        // if (L->size == 1) {
+        if (L->begin->next == NULL) {
+            L->begin->next = p;
+            L->size++;
+        }
+        // a lista possui mais do que um elemento
+        else {
+            Node *q = L->begin->next;
+    
+            while (q->next != NULL) {
+                q = q->next;
+            }
+            q->next = p;
+            L->size++;
+        }
+
+    }
+}
+
 
 long LinkedList_size_slow(const LinkedList *L) {
     long size = 0;  // numero de nós da lista
@@ -74,6 +126,8 @@ void LinkedList_print(const LinkedList *L) {
     Node *p = L->begin;
 
     while (p != NULL) {
+    // alternativamente
+    // for (int i = 0; i < L->size; i++) {
         printf("%d -> ", p->val);
         p = p->next;
     }
