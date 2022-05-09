@@ -104,12 +104,13 @@ void LinkedList_add_last(LinkedList *L, int val) {
     // se a lista estiver vazia
     if (LinkedList_is_empty(L)) {
         L->begin = q;
+        L->end = q;
     }
     else {
         L->end->next = q;
+        L->end = L->end->next;
     }
 
-    L->end = q;
     L->size++;
 }
 
