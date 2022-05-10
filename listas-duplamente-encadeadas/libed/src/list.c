@@ -57,15 +57,14 @@ bool List_is_empty(const List *L) {
     return L->size == 0;
 }
 
-
 void List_add_first(List *L, int val) {
     Node *p = Node_create(val);
-    p->next = L->begin;
     
     if (List_is_empty(L)) {
         L->end = p;
     }
     else {
+        p->next = L->begin;
         L->begin->prev = p;
     }
 
@@ -73,14 +72,17 @@ void List_add_first(List *L, int val) {
     L->size++;
 }
 
+
+
+
 void List_add_last(List *L, int val) {
     Node *p = Node_create(val);
-    p->prev = L->end;
 
     if (List_is_empty(L)) {
         L->begin = p;
     }
     else {
+        p->prev = L->end;
         L->end->next = p;
     }
     
@@ -119,7 +121,7 @@ void List_inverted_print(const List *L) {
 
     printf("L->end -> ");
 
-    // enquanto p não chegou ao fim da lista, isto é,
+    // enquanto p não chegou ao início da lista, isto é,
     // enquanto p estiver apontando para um nó da lista
     while (p != NULL) {
         printf("%d -> ", p->val);
@@ -138,52 +140,71 @@ void List_inverted_print(const List *L) {
     puts("");
 }
 
+
 void List_remove(List *L, int val) {
     if (!List_is_empty(L)) {
-        Node *p = L->begin;
+        Node *p = NULL;
 
         // caso 1: o elemento está na cabeça da lista
         if (L->begin->val == val) {
-            L->begin = p->next;
-            
-            // a lista possui apenas um único elemento
-            if (L->end == p) {
+            printf("**** CASO 1: CABEÇA DA LISTA\n\n");
+
+            p = L->begin;
+
+            if (L->size == 1) {
+                L->begin = NULL;
                 L->end = NULL;
             }
-            // a lista possui mais de um elemento
             else {
+                L->begin = L->begin->next;
                 L->begin->prev = NULL;
             }
-            
+
             free(p);
             L->size--;
         }
         // caso 2: o elemento está no meio da lista
         // caso 3: o elemento está no final da lista
         else {
-            p = p->next;
+            // aponte para o segundo nó da lista
+            p = L->begin->next;
 
-            while (p != NULL) {
-                if (p->val == val) {
-                    p->prev->next = p->next;
-                    
-                    // caso 3
-                    if (L->end == p) {
-                        L->end = p->prev;
-                    }
-                    // caso 2
-                    else {
-                        p->next->prev = p->prev;
-                    }
+            // enquanto p está apontando para algum nó e
+            // o nó não possui o valor desejado, vá para o próximo nó.
+            // Ao final desse loop, o ponteiro p estará ou apontando para
+            // o nó desejado, ou seja, o nó de valor val, ou ele chegou
+            // no final da lista (p == NULL), o que significa que
+            // não há nenhum nó na lista com valor val
+            while (p != NULL && p->val != val) {
+                p = p->next;
+            }
 
-                    free(p);
-                    p = NULL;
-                    L->size--;
+            // achou um nó com valor val
+            if (p != NULL) {
+                p->prev->next = p->next;
+
+                // caso 3: se p aponta para o último
+                if (L->end == p) {
+                    L->end = p->prev;
+                    printf("**** CASO 3: CAUDA DA LISTA\n\n");
                 }
+                // caso 2: p está apontando para um nó do meio da lista
                 else {
-                    p = p->next;
+                    p->next->prev = p->prev;
+                    printf("**** CASO 2: MEIO DA LISTA\n\n");
                 }
+                
+                free(p);
+                L->size--;
+            }
+            else {
+                printf("**** NÃO ACHOU!\n\n");
             }
         }
     }
+    else {
+        printf("**** LISTA VAZIA\n\n");
+    }
 }
+
+
